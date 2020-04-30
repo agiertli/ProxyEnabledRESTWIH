@@ -32,7 +32,7 @@ public class ProxyEnabledRestWIH extends RESTWorkItemHandler {
 			clientBuilder.useSystemProperties(); // enable proxy
 
 			HttpClient httpClient = clientBuilder.build();
-			logger.info("Creating proxy enabled http client");
+			logger.info("getHttpClient - Creating proxy enabled http client");
 
 			return httpClient;
 		} else {
@@ -50,6 +50,7 @@ public class ProxyEnabledRestWIH extends RESTWorkItemHandler {
 
 		RequestConfig config = RequestConfig.custom().setSocketTimeout(readTimeout).setConnectTimeout(connectTimeout)
 				.setConnectionRequestTimeout(connectTimeout).build();
+			logger.info("getNewPooledHttpClient - Creating proxy enabled http client");
 
 		return HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(config)
 				.useSystemProperties().build(); //proxy
