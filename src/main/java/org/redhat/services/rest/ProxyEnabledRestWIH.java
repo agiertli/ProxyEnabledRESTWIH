@@ -2,8 +2,10 @@ package org.redhat.services.rest;
 
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.params.CoreConnectionPNames;
 import org.jbpm.process.workitem.rest.RESTWorkItemHandler;
 import org.slf4j.Logger;
@@ -41,6 +43,16 @@ public class ProxyEnabledRestWIH extends RESTWorkItemHandler {
 			return httpClient;
 		}
 
+	}
+
+	@Override
+	protected CloseableHttpClient getNewPooledHttpClient(Integer readTimeout, Integer connectTimeout) {
+
+		RequestConfig config = RequestConfig.custom().setSocketTimeout(readTimeout).setConnectTimeout(connectTimeout)
+				.setConnectionRequestTimeout(connectTimeout).build();
+
+		return HttpClients.custom().setConnectionManager(connectionManager).setDefaultRequestConfig(config)
+				.useSystemProperties().build(); //proxy
 	}
 
 }
